@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Внедрение ИИ-агентов · КП для АИМ «Контраст» · ИИ-ВИЗАЦИЯ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Если есть файл DrukCyr — раскомментируйте и положите шрифт рядом:
+@font-face{
+  font-family:'DrukCyr';
+  src:url('DrukCyr-Bold.woff2') format('woff2');
+  font-weight:700;font-display:swap;
+}
+*/
+:root{
+  --accent:#21AA4D;
+  --accent-dark:#188A3D;
+  --bg:#FFFFFF;
+  --bg2:#F2F2F2;
+  --ink:#303030;
+  --gray:#6F6F6F;
+  --line:#E3E3E3;
+  --display:'DrukCyr','Oswald',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  font-weight:400;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+::selection{background:rgba(33,170,77,.25)}
+.container{max-width:1080px;margin:0 auto;padding:0 24px}
+section{padding:90px 0;position:relative}
+section.alt{background:var(--bg2)}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.fade{animation:fadeInUp .8s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.08s}.d2{animation-delay:.16s}.d3{animation-delay:.24s}.d4{animation-delay:.32s}
+
+/* ---------- hero ---------- */
+.hero{min-height:88vh;display:flex;align-items:center;padding:110px 0 80px;position:relative;overflow:hidden}
+.hero::before{
+  content:'';position:absolute;right:-220px;top:-220px;width:640px;height:640px;border-radius:50%;
+  background:radial-gradient(circle,rgba(33,170,77,.12) 0%,transparent 65%);pointer-events:none;
+}
+.badges{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px}
+.badge{
+  font-size:12.5px;font-weight:600;letter-spacing:.04em;
+  padding:8px 16px;border-radius:100px;border:1px solid var(--line);
+  background:var(--bg);color:var(--gray);
+}
+.badge.green{border-color:var(--accent);color:var(--accent);background:rgba(33,170,77,.06)}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+h1{
+  font-family:var(--display);font-size:clamp(42px,7vw,84px);font-weight:700;
+  line-height:1.02;letter-spacing:.01em;text-transform:uppercase;margin-bottom:26px;
+}
+h1 .acc{color:var(--accent)}
+.hero-sub{font-size:18px;color:var(--gray);max-width:700px;margin-bottom:48px}
+.hero-sub b{color:var(--ink);font-weight:600}
+
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.metric{background:var(--bg);padding:26px 14px;text-align:center}
+.metric .num{font-family:var(--display);font-size:clamp(24px,3vw,38px);font-weight:700;color:var(--accent);text-transform:uppercase;line-height:1}
+.metric .lbl{font-size:12.5px;color:var(--gray);margin-top:8px}
+
+/* ---------- section headers ---------- */
+.sec-num{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.18em;margin-bottom:14px}
+h2{
+  font-family:var(--display);font-size:clamp(32px,4.6vw,54px);font-weight:700;
+  text-transform:uppercase;letter-spacing:.01em;line-height:1.05;margin-bottom:18px;
+}
+.sec-sub{color:var(--gray);font-size:16.5px;max-width:680px;margin-bottom:52px}
+.sec-sub b{color:var(--ink);font-weight:600}
+
+/* ---------- cards ---------- */
+.grid{display:grid;gap:18px}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.card{
+  background:var(--bg);border:1px solid var(--line);border-radius:16px;
+  padding:30px;transition:transform .3s,border-color .3s,box-shadow .3s;
+}
+section.alt .card{border-color:transparent}
+.card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 32px rgba(48,48,48,.08)}
+.card .emoji{font-size:26px;margin-bottom:14px}
+.card h3{font-size:18px;font-weight:700;margin-bottom:10px}
+.card p{color:var(--gray);font-size:14.5px}
+.card p b{color:var(--ink);font-weight:600}
+section:not(.alt) .card{background:var(--bg2);border-color:transparent}
+section:not(.alt) .card:hover{border-color:var(--accent)}
+
+/* ---------- agent cards ---------- */
+.agent{background:var(--bg);border-radius:18px;padding:36px;margin-bottom:20px;border:1px solid var(--line);border-left:5px solid var(--accent);transition:box-shadow .3s}
+section.alt .agent{border-color:transparent;border-left:5px solid var(--accent)}
+.agent:hover{box-shadow:0 14px 36px rgba(48,48,48,.09)}
+.agent-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.agent-title{font-size:21px;font-weight:700;line-height:1.3}
+.agent-title .who{font-size:12px;font-weight:600;color:var(--accent);display:block;margin-top:6px;letter-spacing:.1em;text-transform:uppercase}
+.tag{font-size:11px;font-weight:700;letter-spacing:.08em;padding:7px 15px;border-radius:100px;white-space:nowrap}
+.tag.prod{background:var(--accent);color:#fff}
+.tag.research{background:var(--ink);color:#fff}
+.agent-body{color:var(--gray);font-size:15px;margin-top:14px}
+.agent-body b{color:var(--ink);font-weight:600}
+.agent-flow{
+  font-size:13px;font-weight:500;color:var(--accent-dark);background:rgba(33,170,77,.07);
+  border:1px solid rgba(33,170,77,.25);border-radius:10px;padding:13px 18px;margin-top:16px;line-height:1.7;
+}
+.result-box{
+  margin-top:18px;padding:16px 20px;border-radius:12px;
+  background:rgba(33,170,77,.08);font-size:14.5px;color:var(--ink);
+}
+.result-box b{color:var(--accent-dark);font-weight:700}
+.warn-box{
+  margin-top:18px;padding:16px 20px;border-radius:12px;
+  background:var(--ink);font-size:14.5px;color:#E9E9E9;
+}
+.warn-box b{color:#fff;font-weight:700}
+
+/* ---------- roadmap ---------- */
+.stage{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:34px;margin-bottom:18px}
+.stage-top{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.stage h3{font-size:19px;font-weight:700}
+.stage h3 .n{font-family:var(--display);color:var(--accent);margin-right:12px;text-transform:uppercase;font-size:21px}
+.stage-meta{font-size:12.5px;font-weight:600;color:var(--gray);letter-spacing:.04em}
+.stage p{color:var(--gray);font-size:14.5px;margin-top:8px}
+.stage p b{color:var(--ink);font-weight:600}
+.hours{font-size:12.5px;font-weight:600;color:var(--accent-dark);margin-top:14px;letter-spacing:.03em}
+
+/* ---------- training ---------- */
+.week{border-left:3px solid var(--accent);padding:6px 0 6px 28px;margin-bottom:34px;position:relative}
+.week::before{content:'';position:absolute;left:-8px;top:12px;width:13px;height:13px;border-radius:50%;background:var(--accent)}
+.week h3{font-size:20px;font-weight:700;margin-bottom:6px}
+.week .wk-lbl{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.week ul{list-style:none;margin-top:12px}
+.week li{color:var(--gray);font-size:15px;padding:5px 0 5px 26px;position:relative}
+.week li::before{content:'›';position:absolute;left:6px;color:var(--accent);font-weight:800}
+.week li b{color:var(--ink);font-weight:600}
+
+/* ---------- team ---------- */
+.team-card .role{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.team-card h3{font-size:19px}
+
+/* ---------- price ---------- */
+.price-box{
+  background:var(--ink);border-radius:24px;
+  padding:70px 40px;text-align:center;position:relative;overflow:hidden;color:#E9E9E9;
+}
+.price-box::before{
+  content:'';position:absolute;left:-180px;bottom:-180px;width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(circle,rgba(33,170,77,.3) 0%,transparent 65%);pointer-events:none;
+}
+.price-label{font-size:13px;font-weight:700;letter-spacing:.18em;color:#9c9c9c;text-transform:uppercase;margin-bottom:18px}
+.price-num{
+  font-family:var(--display);font-weight:700;font-size:clamp(56px,10vw,118px);line-height:1;
+  color:var(--accent);text-transform:uppercase;
+}
+.price-sub{color:#b8b8b8;font-size:16px;margin-top:16px}
+.price-includes{max-width:640px;margin:38px auto 0;text-align:left;position:relative}
+.price-includes li{list-style:none;color:#c9c9c9;font-size:15px;padding:10px 0 10px 32px;position:relative;border-bottom:1px solid rgba(255,255,255,.1)}
+.price-includes li:last-child{border-bottom:none}
+.price-includes li::before{content:'✓';position:absolute;left:4px;color:var(--accent);font-weight:800}
+.price-includes li b{color:#fff;font-weight:600}
+.pay-stages{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:36px;position:relative}
+.pay{font-size:13px;font-weight:500;color:#c9c9c9;border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:10px 20px}
+.pay b{color:var(--accent);font-weight:800}
+.cta{
+  display:inline-block;margin-top:44px;padding:20px 54px;border-radius:100px;
+  background:var(--accent);color:#fff;font-weight:700;font-size:17px;text-decoration:none;
+  box-shadow:0 10px 34px rgba(33,170,77,.4);transition:transform .25s,box-shadow .25s,background .25s;position:relative;
+}
+.cta:hover{transform:translateY(-3px);background:var(--accent-dark);box-shadow:0 16px 44px rgba(33,170,77,.5)}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:44px 0;text-align:center;color:var(--gray);font-size:14px}
+footer .logo{font-family:var(--display);color:var(--accent);letter-spacing:.1em;text-transform:uppercase;font-size:18px;margin-bottom:8px}
+
+@media(max-width:860px){
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .metric:last-child{grid-column:span 2}
+  .grid-3{grid-template-columns:1fr}
+  section{padding:64px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="badges fade">
+      <span class="badge green">🤖 ИИ-ВИЗАЦИЯ</span>
+      <span class="badge">🎯 АИМ «Контраст» · Москва — Рязань</span>
+      <span class="badge">Performance-маркетинг с 2010 года</span>
+    </div>
+    <div class="eyebrow fade d1">Коммерческое предложение для АИМ «Контраст»</div>
+    <h1 class="fade d2">Шесть ИИ-агентов<br>в процессы агентства.<br><span class="acc">Внедряем и обучаем</span></h1>
+    <p class="hero-sub fade d3">Закрываем все шесть задач, которые озвучили <b>Алина, Никита и Георгий</b>: от пост-митов и SEO-отчётов до дашборда по Директу. Внедряем руками в вашем контуре, две недели обучаем сотрудников работе с агентами — и месяц сопровождаем, пока команда не выйдет в свободное плавание.</p>
+    <div class="metrics fade d4">
+      <div class="metric"><div class="num">6</div><div class="lbl">Агентов под ваши задачи</div></div>
+      <div class="metric"><div class="num">9 нед.</div><div class="lbl">Внедрение + обучение</div></div>
+      <div class="metric"><div class="num">232 ч</div><div class="lbl">Работы трёх экспертов</div></div>
+      <div class="metric"><div class="num">+1 мес.</div><div class="lbl">Поддержка после запуска</div></div>
+      <div class="metric"><div class="num">1,49 млн ₽</div><div class="lbl">Полный пакет</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ СОСТАВ РАБОТ ============ -->
+<section class="alt">
+  <div class="container">
+    <div class="sec-num">01 · СОСТАВ РАБОТ</div>
+    <h2>Два слоя + фундамент</h2>
+    <p class="sec-sub">Мы не отдаём вам «коробку с инструкцией». Сначала <b>внедряем агентов руками</b>, параллельно готовим инфраструктуру, затем <b>обучаем сотрудников</b> — и остаёмся рядом ещё месяц.</p>
+    <div class="grid grid-3">
+      <div class="card">
+        <div class="emoji">🛠</div>
+        <h3>Слой 1 · Внедрение</h3>
+        <p>Шесть агентов под задачи Алины, Никиты и Георгия. Самописные решения <b>в вашем контуре</b> — без подписок на чужие платформы и вендор-лока.</p>
+      </div>
+      <div class="card">
+        <div class="emoji">🎓</div>
+        <h3>Слой 2 · Обучение</h3>
+        <p>Двухнедельный корпоративный тренинг для сотрудников, которые будут работать с агентами. <b>На ваших реальных задачах</b>, а не на абстрактных примерах.</p>
+      </div>
+      <div class="card">
+        <div class="emoji">🤝</div>
+        <h3>Месяц поддержки</h3>
+        <p>После запуска — чат с экспертами, донастройка агентов под обратную связь команды и <b>дорожная карта 30/60/90</b> для самостоятельной работы.</p>
+      </div>
+      <div class="card">
+        <div class="emoji">🔌</div>
+        <h3>Фундамент · Инфраструктура</h3>
+        <p>Вы работаете из России — поднимаем <b>сервер и VPN-контур</b>, чтобы у всей команды был бесперебойный доступ к Claude, GPT и другим моделям. Без танцев с бубном.</p>
+      </div>
+      <div class="card">
+        <div class="emoji">🔒</div>
+        <h3>Безопасность данных</h3>
+        <p>Вы ведёте 120+ млн ₽ клиентских бюджетов. Данные клиентов <b>не уходят в чужие сервисы</b>: агенты работают на вашем сервере, доступы — по регламенту, который мы напишем.</p>
+      </div>
+      <div class="card">
+        <div class="emoji">📐</div>
+        <h3>Аудит процессов</h3>
+        <p>Перед стартом — короткий аудит: как сейчас устроены созвоны, отчёты, выгрузки из Топвизора и Директа. Агенты встраиваются <b>в ваши процессы</b>, а не наоборот.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ АГЕНТЫ ============ -->
+<section>
+  <div class="container">
+    <div class="sec-num">02 · ШЕСТЬ АГЕНТОВ</div>
+    <h2>Каждый агент — под конкретную задачу и конкретного человека</h2>
+    <p class="sec-sub">Это те самые шесть задач из вашего ТЗ. Для каждой — что делаем, как это работает и какой результат получает постановщик. Статус <b style="color:var(--accent)">ПРОДАКШН</b> — рабочий инструмент к концу проекта. Статус <b>RESEARCH</b> — честно помечаем то, где есть внешнее ограничение, и фиксируем реалистичный план.</p>
+
+    <div class="agent">
+      <div class="agent-head">
+        <div class="agent-title">📝 Агент «Пост-мит» — задачи из созвонов за 10–15 минут
+          <span class="who">Задача Никиты Попова</span>
+        </div>
+        <span class="tag prod">ПРОДАКШН</span>
+      </div>
+      <div class="agent-body">Сейчас: запись → ручная транскрипция → вручную в Claude с промтом → вручную в таблицу. Делаем полный автомат: закинули запись созвона — агент сам транскрибирует, извлекает задачи и раскладывает их в рабочую среду.</div>
+      <div class="agent-flow">Запись созвона → транскрипция → ИИ-разбор → Google-таблица:<br>задача · ответственный · приоритет · комментарий — через 10–15 минут после звонка</div>
+      <div class="result-box"><b>Результат:</b> ни одна договорённость с клиентом не теряется. Никита перестаёт тратить вечер на разбор записей — задачи появляются в инфополе сами.</div>
+    </div>
+
+    <div class="agent">
+      <div class="agent-head">
+        <div class="agent-title">📈 Агент «SEO-переводчик» — отчёты с вау-эффектом из Топвизора
+          <span class="who">Задача Георгия</span>
+        </div>
+        <span class="tag prod">ПРОДАКШН</span>
+      </div>
+      <div class="agent-body">Проблема знакомая: позиции растут, а клиент видит таблицу сырых цифр и читает её как стагнацию. Агент берёт выгрузку из Топвизора и систем сбора позиций и превращает её в отчёт <b>на языке бизнеса</b>: что выросло, почему это важно, какие работы к этому привели.</div>
+      <div class="agent-flow">Выгрузка Топвизора → анализ динамики → подсветка роста, графики,<br>пояснение ключевых запросов → готовый отчёт «глазами клиента»</div>
+      <div class="result-box"><b>Результат:</b> клиент видит ценность работы SEO-отдела, а не «опять какие-то проценты». Меньше вопросов «а что вы вообще делали в этом месяце».</div>
+    </div>
+
+    <div class="agent">
+      <div class="agent-head">
+        <div class="agent-title">🖥 Дашборд Яндекс.Директ + Метрика с гостевым доступом
+          <span class="who">Задача Георгия</span>
+        </div>
+        <span class="tag prod">ПРОДАКШН</span>
+      </div>
+      <div class="agent-body">Автовыгрузка из Яндекс.Директа и Яндекс.Метрики по API в единый дашборд. Директолог видит аналитику в реальном времени и <b>экономит 15–60 минут на каждом отчёте</b>. Клиенту — гостевая ссылка с персональным видом: только его метрики (заявки, конверсия, CPL), без внутренней кухни.</div>
+      <div class="agent-flow">API Директа + Метрики → автообновление дашборда →<br>вид директолога (всё) · гостевая ссылка клиента (заявки · конверсия · CPL)</div>
+      <div class="result-box"><b>Результат:</b> еженедельные и ежемесячные отчёты собираются сами. Клиент чувствует прозрачность — это удерживает его в агентстве.</div>
+    </div>
+
+    <div class="agent">
+      <div class="agent-head">
+        <div class="agent-title">📊 Агент «Фирменный отчёт» — презентации из статистики
+          <span class="who">Задача Алины</span>
+        </div>
+        <span class="tag prod">ПРОДАКШН</span>
+      </div>
+      <div class="agent-body">Сейчас красивые отчёты собираются вручную через Perplexity и Claude. Делаем то, что вы и просили: <b>«закинул данные → получил красивый отчёт»</b>. Единый фирменный шаблон в стиле «Контраста» — агент сам раскладывает статистику по слайдам, считает выводы и оформляет.</div>
+      <div class="agent-flow">Загрузка статистики → разбор данных → фирменный шаблон «Контраста» →<br>готовая презентация-отчёт без ручной настройки</div>
+      <div class="result-box"><b>Результат:</b> часы ручной вёрстки превращаются в минуты. Все отчёты агентства выглядят одинаково дорого — в ваших цветах.</div>
+    </div>
+
+    <div class="agent">
+      <div class="agent-head">
+        <div class="agent-title">🔍 Агент «Радар» — еженедельные сводки по конкурентам и трендам
+          <span class="who">Задача Алины</span>
+        </div>
+        <span class="tag prod">ПРОДАКШН</span>
+      </div>
+      <div class="agent-body">Каждую неделю агент сам обходит авторитетные Telegram-каналы и новостные ресурсы по маркетингу, собирает активности конкурентов и тренды. Главное требование вашего ТЗ соблюдаем жёстко: <b>каждый факт — со ссылкой на источник</b>. Нет ссылки — факт не попадает в сводку. Никаких галлюцинаций.</div>
+      <div class="agent-flow">Расписание (раз в неделю) → мониторинг TG-каналов и СМИ →<br>структурированная сводка: тренд · конкурент · ссылка на источник</div>
+      <div class="result-box"><b>Результат:</b> единое место вместо ручных запросов в Perplexity. Сводка приходит сама — Алина читает, а не собирает.</div>
+    </div>
+
+    <div class="agent" style="border-left-color:var(--ink)">
+      <div class="agent-head">
+        <div class="agent-title">🕐 Агент «Хронограф» — фото рабочего дня
+          <span class="who">Задача Алины</span>
+        </div>
+        <span class="tag research">ПРОДАКШН + RESEARCH</span>
+      </div>
+      <div class="agent-body">Ежедневная сводка: на что ушло время, с разбивкой по задачам и ролям (руководитель проектов vs куратор проджектов). По Telegram-чатам и задачам — <b>полноценный продакшн</b>: там есть выгрузка, агент собирает картину дня автоматически.</div>
+      <div class="warn-box"><b>Честно про Max:</b> у Max сейчас нет выгрузки переписки и открытого API — это внешнее ограничение, врать про него не будем. В рамках проекта проводим research: тестируем обходные пути (десктоп-сбор, полуавтоматический экспорт) и фиксируем рабочую схему. Telegram-часть и сводки работают в любом случае.</div>
+      <div class="result-box"><b>Результат:</b> ежедневное фото рабочего дня по Telegram и задачам + зафиксированная схема подключения Max, как только появится техническая возможность.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ДОРОЖНАЯ КАРТА ============ -->
+<section class="alt">
+  <div class="container">
+    <div class="sec-num">03 · ДОРОЖНАЯ КАРТА</div>
+    <h2>9 недель внедрения и обучения, потом месяц поддержки</h2>
+    <p class="sec-sub">Этапы идут внахлёст: пока первая волна агентов выходит в работу, вторая уже в разработке. Часы — реальная оценка работы команды, всего <b>232 часа</b>.</p>
+
+    <div class="stage">
+      <div class="stage-top"><h3><span class="n">Этап 0</span>Аудит и доступы</h3><span class="stage-meta">Неделя 1 · 16 ч</span></div>
+      <p>Созвоны с Алиной, Никитой и Георгием: фиксируем процессы как есть, получаем доступы (Топвизор, Директ, Метрика, Google-таблицы, записи созвонов). Утверждаем приоритеты волн.</p>
+      <div class="hours">Станислав 6 ч · Ефим 10 ч</div>
+    </div>
+    <div class="stage">
+      <div class="stage-top"><h3><span class="n">Этап 1</span>Инфраструктура: сервер, VPN, доступ к моделям</h3><span class="stage-meta">Недели 1–2 · 24 ч</span></div>
+      <p>Поднимаем сервер и VPN-контур для команды: <b>бесперебойный доступ к Claude, GPT и другим моделям из России</b> для всех сотрудников. Пишем регламент безопасности по данным клиентов. Это фундамент — без него агенты не живут.</p>
+      <div class="hours">Ефим 16 ч · Роман 8 ч</div>
+    </div>
+    <div class="stage">
+      <div class="stage-top"><h3><span class="n">Этап 2</span>Волна 1: быстрые победы</h3><span class="stage-meta">Недели 2–5 · 70 ч</span></div>
+      <p>Внедряем агентов с самым быстрым эффектом: <b>«Пост-мит»</b> (Никита), <b>«Фирменный отчёт»</b> и <b>«Радар»</b> (Алина). К концу пятой недели команда уже пользуется первыми тремя агентами в боевом режиме.</p>
+      <div class="hours">Ефим 40 ч · Роман 22 ч · Станислав 8 ч</div>
+    </div>
+    <div class="stage">
+      <div class="stage-top"><h3><span class="n">Этап 3</span>Волна 2: аналитика и отчётность</h3><span class="stage-meta">Недели 4–8 · 78 ч</span></div>
+      <p>Параллельно с волной 1: <b>«SEO-переводчик»</b> и <b>дашборд Директ + Метрика</b> (Георгий), <b>«Хронограф»</b> (Алина) — включая research по Max. Интеграции с API Яндекса, настройка гостевых доступов для клиентов агентства.</p>
+      <div class="hours">Ефим 44 ч · Роман 26 ч · Станислав 8 ч</div>
+    </div>
+    <div class="stage">
+      <div class="stage-top"><h3><span class="n">Этап 4</span>Корпоративный тренинг — 2 недели</h3><span class="stage-meta">Недели 8–9 · 28 ч</span></div>
+      <p>Обучаем сотрудников отделов работе с внедрёнными агентами — программа ниже. Цель: команда работает с агентами <b>без нас</b>.</p>
+      <div class="hours">Станислав 14 ч · Роман 8 ч · Ефим 6 ч</div>
+    </div>
+    <div class="stage">
+      <div class="stage-top"><h3><span class="n">Этап 5</span>Поддержка и свободное плавание</h3><span class="stage-meta">Недели 10–13 · 16 ч</span></div>
+      <p>Месяц после запуска: чат с экспертами, донастройка агентов по обратной связи, разбор инцидентов. На выходе — <b>дорожная карта 30/60/90</b> и план волны 2 по другим отделам.</p>
+      <div class="hours">Ефим 10 ч · Роман 6 ч</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ТРЕНИНГ ============ -->
+<section>
+  <div class="container">
+    <div class="sec-num">04 · КОРПОРАТИВНЫЙ ТРЕНИНГ</div>
+    <h2>Две недели, чтобы команда работала с ИИ сама</h2>
+    <p class="sec-sub">Не лекции про «будущее ИИ», а практикум на ваших процессах: проджекты, SEO-отдел, директологи. Онлайн, с записями всех сессий и чатом с экспертами.</p>
+
+    <div class="week">
+      <div class="wk-lbl">Неделя 1 · Фундамент</div>
+      <h3>Работа с ИИ на задачах агентства</h3>
+      <ul>
+        <li><b>Сессия 1.</b> Основы: как устроены модели, промптинг на реальных задачах «Контраста» — тексты, брифы, анализ ниш</li>
+        <li><b>Сессия 2.</b> Безопасность: что можно и что нельзя отправлять в модели, регламент работы с данными клиентов</li>
+        <li><b>Сессия 3.</b> Работа с агентами волны 1: пост-миты, фирменные отчёты, сводка по конкурентам — кто и как пользуется</li>
+      </ul>
+    </div>
+    <div class="week">
+      <div class="wk-lbl">Неделя 2 · По ролям</div>
+      <h3>Каждый отдел — со своими агентами</h3>
+      <ul>
+        <li><b>Сессия 4.</b> Блок проджектов: «Хронограф», ежедневные сводки, контроль задач из созвонов</li>
+        <li><b>Сессия 5.</b> Блок SEO и контекста: «SEO-переводчик», дашборд Директа, гостевые ссылки для клиентов</li>
+        <li><b>Сессия 6.</b> Самостоятельность: как дорабатывать промпты агентов, типовые сбои и что с ними делать, дорожная карта 30/60/90</li>
+      </ul>
+    </div>
+    <div class="grid grid-3" style="margin-top:40px">
+      <div class="card"><div class="emoji">🎥</div><h3>Записи навсегда</h3><p>Все сессии записываются — новые сотрудники онбордятся по ним без нас.</p></div>
+      <div class="card"><div class="emoji">📚</div><h3>Библиотека промптов</h3><p>Готовые промпты под задачи каждого отдела — остаются у вас.</p></div>
+      <div class="card"><div class="emoji">💬</div><h3>Чат с экспертами</h3><p>Вопросы по ходу тренинга и весь месяц поддержки — отвечаем в рабочем чате.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ КОМАНДА ============ -->
+<section class="alt">
+  <div class="container">
+    <div class="sec-num">05 · КОМАНДА ПРОЕКТА</div>
+    <h2>Три эксперта на всём протяжении проекта</h2>
+    <p class="sec-sub">Те же люди, что внедряли ИИ строительной компании в Норильске, девелоперу в Дубае и сети ресторанов. Исполнительный руководитель проекта — Ефим.</p>
+    <div class="grid grid-3">
+      <div class="card team-card">
+        <div class="role">Исполнительный руководитель · Lead-инженер</div>
+        <h3>Ефим Герасимов</h3>
+        <p>Ведёт проект от аудита до поддержки: архитектура агентов, инфраструктура, VPN-контур, интеграции с API. Ваш главный контакт по всем техническим вопросам.</p>
+      </div>
+      <div class="card team-card">
+        <div class="role">Методология · Обучение</div>
+        <h3>Станислав Панков</h3>
+        <p>Программа тренинга и методология внедрения. Обучил работе с ИИ 10 000+ человек — от корпораций до команд из трёх человек.</p>
+      </div>
+      <div class="card team-card">
+        <div class="role">Разработка · Автоматизация</div>
+        <h3>Роман Пищулов</h3>
+        <p>Разработка агентов, пайплайны обработки данных, дашборды. Отвечает за то, чтобы «закинул данные → получил отчёт» работало без сбоев.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ РЕЗУЛЬТАТЫ ============ -->
+<section>
+  <div class="container">
+    <div class="sec-num">06 · ЧТО ОСТАЁТСЯ У ВАС</div>
+    <h2>Не отчёт о проделанной работе, а работающая система</h2>
+    <p class="sec-sub">Всё перечисленное — ваша собственность: код, доступы, регламенты. Никакой абонентки за «пользование агентами».</p>
+    <div class="grid grid-3">
+      <div class="card"><div class="emoji">📝</div><h3>Пост-миты на автомате</h3><p>Задачи из каждого созвона — в Google-таблице через 10–15 минут.</p></div>
+      <div class="card"><div class="emoji">📈</div><h3>SEO-отчёты на языке бизнеса</h3><p>Из выгрузки Топвизора — отчёт, который клиент понимает и ценит.</p></div>
+      <div class="card"><div class="emoji">🖥</div><h3>Дашборд Директа</h3><p>Реальное время для директолога, гостевая ссылка для клиента.</p></div>
+      <div class="card"><div class="emoji">📊</div><h3>Фирменные отчёты</h3><p>Шаблон «Контраста»: закинул статистику — получил презентацию.</p></div>
+      <div class="card"><div class="emoji">🔍</div><h3>Сводки по конкурентам</h3><p>Каждую неделю, структурированно, каждый факт — со ссылкой.</p></div>
+      <div class="card"><div class="emoji">🕐</div><h3>Фото рабочего дня</h3><p>Ежедневная разбивка времени по задачам и ролям + схема по Max.</p></div>
+      <div class="card"><div class="emoji">🔌</div><h3>Инфраструктура в вашем контуре</h3><p>Сервер, VPN, бесперебойный доступ к моделям для всей команды.</p></div>
+      <div class="card"><div class="emoji">🎓</div><h3>Обученная команда</h3><p>Записи тренинга, библиотека промптов, регламент безопасности.</p></div>
+      <div class="card"><div class="emoji">🗺</div><h3>Дорожная карта 30/60/90</h3><p>План самостоятельного развития + план волны 2 на другие отделы.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ЦЕНА ============ -->
+<section class="alt">
+  <div class="container">
+    <div class="sec-num">07 · СТОИМОСТЬ</div>
+    <div class="price-box">
+      <div class="price-label">Полный пакет работ</div>
+      <div class="price-num">1 490 000 ₽</div>
+      <div class="price-sub">6 агентов · инфраструктура · тренинг 2 недели · месяц поддержки · 232 часа работы команды</div>
+      <ul class="price-includes">
+        <li><b>Внедрение шести агентов</b> под задачи Алины, Никиты и Георгия — самописные решения в вашем контуре</li>
+        <li><b>Сервер + VPN-контур</b> с бесперебойным доступом к моделям для всей команды</li>
+        <li><b>Корпоративный тренинг 2 недели</b> — 6 сессий по отделам, записи, библиотека промптов</li>
+        <li><b>Месяц поддержки</b> — чат с экспертами, донастройка, дорожная карта 30/60/90</li>
+        <li><b>Регламент безопасности</b> по работе с данными клиентов агентства</li>
+        <li>Весь код и доступы — <b>ваша собственность</b>, без абонентской платы</li>
+      </ul>
+      <div class="pay-stages">
+        <span class="pay"><b>40%</b> · старт работ</span>
+        <span class="pay"><b>40%</b> · запуск волны 2</span>
+        <span class="pay"><b>20%</b> · после тренинга</span>
+      </div>
+      <a class="cta" href="https://t.me/ii_vizaciya">Согласовать и стартовать →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">ИИ-ВИЗАЦИЯ</div>
+  <div>ii-vizaciya.ru · Коммерческое предложение подготовлено индивидуально для АИМ «Контраст»</div>
+</footer>
+
+</body>
+</html>
