@@ -167,6 +167,13 @@ section.alt .agent{border-color:transparent;border-left:5px solid var(--accent)}
 .price-includes li:last-child{border-bottom:none}
 .price-includes li::before{content:'✓';position:absolute;left:4px;color:var(--accent);font-weight:800}
 .price-includes li b{color:#fff;font-weight:600}
+.price-rows{max-width:660px;margin:38px auto 0;text-align:left;position:relative}
+.price-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:15px}
+.price-row .nm{color:#fff;font-weight:500}
+.price-row .nm small{display:block;color:#9c9c9c;font-weight:400;font-size:12.5px}
+.price-row .pr{white-space:nowrap;font-weight:700;color:var(--accent);font-size:16px}
+.price-row .old{color:#8a8a8a;text-decoration:line-through;font-weight:400;font-size:13.5px;margin-right:10px}
+.price-total{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 0 0;font-size:15px;color:#fff;font-weight:700;border-top:2px solid rgba(33,170,77,.5)}
 .pay-stages{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:36px;position:relative}
 .pay{font-size:13px;font-weight:500;color:#c9c9c9;border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:10px 20px}
 .pay b{color:var(--accent);font-weight:800}
@@ -207,7 +214,7 @@ footer .logo{font-family:var(--display);color:var(--accent);letter-spacing:.1em;
       <div class="metric"><div class="num">9 нед.</div><div class="lbl">Внедрение + обучение</div></div>
       <div class="metric"><div class="num">232 ч</div><div class="lbl">Работы трёх экспертов</div></div>
       <div class="metric"><div class="num">+1 мес.</div><div class="lbl">Поддержка после запуска</div></div>
-      <div class="metric"><div class="num">1,49 млн ₽</div><div class="lbl">Полный пакет</div></div>
+      <div class="metric"><div class="num">630 000 ₽</div><div class="lbl">Пакетом вместо 875 000 ₽</div></div>
     </div>
   </div>
 </header>
@@ -459,17 +466,47 @@ footer .logo{font-family:var(--display);color:var(--accent);letter-spacing:.1em;
   <div class="container">
     <div class="sec-num">07 · СТОИМОСТЬ</div>
     <div class="price-box">
-      <div class="price-label">Полный пакет работ</div>
-      <div class="price-num">1 490 000 ₽</div>
-      <div class="price-sub">6 агентов · инфраструктура · тренинг 2 недели · месяц поддержки · 232 часа работы команды</div>
-      <ul class="price-includes">
-        <li><b>Внедрение шести агентов</b> под задачи Алины, Никиты и Георгия — самописные решения в вашем контуре</li>
-        <li><b>Сервер + VPN-контур</b> с бесперебойным доступом к моделям для всей команды</li>
-        <li><b>Корпоративный тренинг 2 недели</b> — 6 сессий по отделам, записи, библиотека промптов</li>
-        <li><b>Месяц поддержки</b> — чат с экспертами, донастройка, дорожная карта 30/60/90</li>
-        <li><b>Регламент безопасности</b> по работе с данными клиентов агентства</li>
-        <li>Весь код и доступы — <b>ваша собственность</b>, без абонентской платы</li>
-      </ul>
+      <div class="price-label">Стоимость по блокам · пакетом выгоднее</div>
+      <div class="price-num">630 000 ₽</div>
+      <div class="price-sub">за весь пакет — вместо <s>875 000 ₽</s> по отдельности · выгода 245 000 ₽ (−28%)</div>
+      <div class="price-rows">
+        <div class="price-row">
+          <span class="nm">📝 Агент «Пост-мит»<small>задачи из созвонов за 10–15 минут</small></span>
+          <span class="pr"><span class="old">80 000 ₽</span>50 000 ₽</span>
+        </div>
+        <div class="price-row">
+          <span class="nm">📈 Агент «SEO-переводчик»<small>отчёты с вау-эффектом из Топвизора</small></span>
+          <span class="pr"><span class="old">120 000 ₽</span>80 000 ₽</span>
+        </div>
+        <div class="price-row">
+          <span class="nm">🖥 Дашборд Яндекс.Директ + Метрика<small>с гостевым доступом для клиентов</small></span>
+          <span class="pr"><span class="old">140 000 ₽</span>100 000 ₽</span>
+        </div>
+        <div class="price-row">
+          <span class="nm">📊 Агент «Фирменный отчёт»<small>презентации из статистики</small></span>
+          <span class="pr"><span class="old">120 000 ₽</span>80 000 ₽</span>
+        </div>
+        <div class="price-row">
+          <span class="nm">🔍 Агент «Радар»<small>еженедельные сводки по конкурентам</small></span>
+          <span class="pr"><span class="old">75 000 ₽</span>50 000 ₽</span>
+        </div>
+        <div class="price-row">
+          <span class="nm">🕐 Агент «Хронограф»<small>фото рабочего дня: Max + Telegram + задачи</small></span>
+          <span class="pr"><span class="old">140 000 ₽</span>100 000 ₽</span>
+        </div>
+        <div class="price-row">
+          <span class="nm">🔒 Безопасность + корпоративный VPN + настройка серверов<small>бесперебойный доступ к моделям, регламент безопасности</small></span>
+          <span class="pr"><span class="old">80 000 ₽</span>50 000 ₽</span>
+        </div>
+        <div class="price-row">
+          <span class="nm">🎓 Корпоративный тренинг 2 недели + месяц ведения<small>6 сессий по отделам, записи, библиотека промптов, чат с экспертами</small></span>
+          <span class="pr">120 000 ₽</span>
+        </div>
+        <div class="price-total">
+          <span>Итого пакетом</span>
+          <span><span class="old">875 000 ₽</span>630 000 ₽</span>
+        </div>
+      </div>
       <div class="pay-stages">
         <span class="pay"><b>40%</b> · старт работ</span>
         <span class="pay"><b>40%</b> · запуск волны 2</span>
